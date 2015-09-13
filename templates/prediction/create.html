@@ -1,0 +1,129 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+ <head>
+	<title> TheProbable </title>
+	<!-- later you will use: <link rel="stylesheet" type="text/css" hrf="cssname.css"/> -->
+	
+	<!--scrollbars-->
+		<!-- styles needed by jScrollPane -->
+		<link type="text/css" href="jScrollPane/style/jquery.jscrollpane.css" rel="stylesheet" media="all" />
+		
+		<!-- latest jQuery direct from google's CDN -->
+		<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.4.2/jquery.min.js"></script>
+
+		<!--jScrollPane-->
+		<script type="text/javascript" src="/static/jScrollPane/script/jquery.jscrollpane.min.js"></script>
+		<script type="text/javascript" id="sourcecode">
+			$(function()
+			{
+				$('.scroll-pane').jScrollPane();
+				$('.scroll-pane-arrows').jScrollPane(
+					{
+						showArrows: true,
+						horizontalGutter: 10
+					}
+				);
+			});
+		</script>
+		<!-- the mousewheel plugin - optional to provide mousewheel support -->
+		<script type="text/javascript" src="/static/jScrollPane/script/jquery.mousewheel.js"></script>
+
+	<!--flot-->
+		<script language="javascript" type="text/javascript" src="/static/javascript/flot/jquery.flot.js"></script>
+		<!--[if IE]><script language="javascript" type="text/javascript" src="/static/javascript/flot/excanvas.js"></script><![endif]-->
+		<script language="javascript" type="text/javascript" src="/static/javascript/flot/jquery.flot.fillbetween.js"></script>
+
+	<!-- Reset -->
+	<!--
+	<link rel="stylesheet" type="text/css" href="http://yui.yahooapis.com/2.9.0/build/reset/reset-min.css">
+	-->
+
+	<title>Area Chart</title>
+    <link type="text/css" rel="stylesheet" href="ex.css?3.2"/>
+    <style type="text/css">
+		#fig {
+		  width: 430px;
+		  height: 225px;
+		}
+    </style>
+	
+	<LINK href="/static/probableCauseCSS.css" rel="stylesheet" type="text/css">
+</head>
+<body>
+			
+	<!--<h1> Probable-Cause  </h1> -->
+	<img style="margin-left: 180px; padding-top: 10px; padding-bottom: 5px;" src="/static/images/ProbableCauseTitle.png"> 
+	<img src="/static/images/pixeltriple2a.gif" class="marginindent" height="4" width="750"> 
+	<form style="padding-left: 260px;"> 
+		<input style="font-family:Georgia; font-size: 20px;" class="fillin" type="text" name="username" size="30" maxlength="100" value="Ask a Question:"/> 
+		<input type="image" src="/static/images/buttongear.png" alt="Submit Form"> 
+	</form> 
+	<img src="/static/images/pixelsingle.gif" class="marginindent" height="1" width="750"> 
+    {% if errors %}
+        <ul>
+            {% for error in errors %}
+            <li>{{ error }}</li>
+            {% endfor %}
+        </ul>
+    {% endif %}
+	
+	
+	<script type="text/javascript" src="/static/jquery-validation-1.9.0/jquery.validate.js"></script>
+	<script>
+	$().ready(function() {
+		$("#form1").validate({
+			rules: {
+				"result": "required",
+				"q": "required",
+				"title": "required"}})});
+	</script>
+	
+	<strong> Make a new question: </strong>
+	<form name="form1" id="form1" action="/createcomplete/" class="cmxForm" method="post">{% csrf_token %}
+	<input type="text" name="title" id="title" size="50" class="required" maxlength="55" />
+		<!--ADD THIS LATER
+		<p> Write a qualifier question that indicates someone who would know the answer to your question. </p>
+		<input type="text" name="qualify" size="10" maxlength="40" /> ?
+		<p> check the answer which would leave them qualified to answer your question </p>
+		<input type="radio" name="qualifyanswer" id="radio1" value="true" /> True 
+		<input type="radio" name="qualifyanswer" id="radio2" value="false" /> False
+		ADD THIS LATER-->
+	<p> Re-state the answer in past tense for users who are contributing to your database </p>
+	<input type="text" name="result" id="result" size="30" class="required" maxlength="40"/> ?
+	<ul>
+		<li> Write a question you think is correlated to your question, but anyone who qualified could answer (only nubmers for right now answer 1/0 for true/false or yes/no) </li><input type="text" name="q" class="required" id="q1" size="30" maxlength="40"/> ?
+		<div id="questions"> </div>
+		<input type="hidden" value="0" id="theValue" />
+		<li><a href="javascript:;" onclick="addQuestion();">Add Question</a></li>
+		<script type="text/javascript">
+		function addQuestion() {
+		  var ni = document.getElementById('questions');
+		  var numi = document.getElementById('theValue');
+		  var num = document.getElementById('theValue').value -1 + 2;
+		  numi.value = num;
+		  var newdiv = document.createElement('div');
+		  var divIdName = 'my'+num+'Div';
+		  newdiv.setAttribute('id',divIdName);
+		  newdiv.innerHTML = '<li> Write another question you think is correlated to your question, but anyone who qualified could answer (only nubmers for right now answer 1/0 for true/false or yes/no) </li><input type="text" name="q" id=("q"+"'+divIdName+'"") size="30" class="required" maxlength="40"/> ? <a href=\'#\' onclick=\'removeQuestion("'+divIdName+'")\'> X </a> '
+		  <!--'Element Number '+num+' has been added! <a href=\'#\' onclick=\'removeQuestion("'+divIdName+'")\'>Remove the div "'+divIdName+'"</a>'; -->
+		  ni.appendChild(newdiv);
+		}
+		function removeQuestion(divNum) {
+		  var d = document.getElementById('questions');
+		  var olddiv = document.getElementById(divNum);
+		  d.removeChild(olddiv);
+		}
+		</script>
+	</ul>
+	
+
+		<!-- javascript to more questions (make the button look like the 'revealed' question box) -->
+		<!-- LATER: indicate the type of answer-->
+
+	
+	
+	<p> Choose your own URL? </p>
+	<p> QUIZ CREATION IS PERMINENT. Now is a Great opportunity to CHECK OVER your quiz: quizzes with spelling errors or too many capitolizations are given lower priority automatically <p> 
+	<input type="submit" value="Submit" />
+</body>
+</html>

@@ -1,0 +1,17 @@
+<h1>{{ poll.question }}</h1>
+
+{% if error_message %}<p><strong>{{ error_message }}</strong></p>{% endif %}
+
+<form action="/{{ poll.id }}/vote/" method="post">
+{% csrf_token %}
+
+<!-- THIS IS SO COOL, IT LOOPS THROUGH ALL THE CHOICES, 
+WE COULD MAKE A SIMILAR THING TO LOOP THROUGH ALL THE QUESTIONS IN A TEST!
+LOOK:     -->
+
+{% for choice in poll.choice_set.all %} 
+    <input type="radio" name="choice" id="choice{{ forloop.counter }}" value="{{ choice.id }}" />
+    <label for="choice{{ forloop.counter }}">{{ choice.choice }}</label><br />
+{% endfor %}
+<input type="submit" value="Vote, silly" />
+</form>

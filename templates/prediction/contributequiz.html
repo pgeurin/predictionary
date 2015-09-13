@@ -1,0 +1,15 @@
+<h1>{{prediction.name}}</h1>
+{% if error_message %}<p><strong>{{ error_message }}</strong></p>{% endif %}
+
+<form action="/{{ prediction.id }}/vote/" method="post">
+{% csrf_token %}
+
+    <label for="result"> {{ prediction.result.name }} </label><br/>
+    <input type="text" name="result" id="result"  /> <br/>
+
+    {% for question in prediction.question_set.all %} 
+        <label for="question{{ forloop.counter }}"> {{ question.name }} </label><br/>
+        <input type="text" name="answer{{ forloop.counter }}" id="answer{{ forloop.counter }}"  /> <br/>
+    {% endfor %}
+<input type="submit" value="Vote, silly" />
+</form>

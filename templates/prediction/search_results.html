@@ -1,0 +1,71 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+ <head>
+	<title> TheProbable </title>
+	<!-- later you will use: <link rel="stylesheet" type="text/css" hrf="cssname.css"/> -->
+	
+	<!--scrollbars-->
+		<!-- styles needed by jScrollPane -->
+		<link type="text/css" href="jScrollPane/style/jquery.jscrollpane.css" rel="stylesheet" media="all" />
+		
+		<!-- latest jQuery direct from google's CDN -->
+		<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.4.2/jquery.min.js"></script>
+
+		<!--jScrollPane-->
+		<script type="text/javascript" src="/static/jScrollPane/script/jquery.jscrollpane.min.js"></script>
+		<script type="text/javascript" id="sourcecode">
+			$(function(){
+				$('.scroll-pane').jScrollPane();
+				$('.scroll-pane-arrows').jScrollPane(
+						{showArrows: true,
+						horizontalGutter: 10});});
+		</script>
+		<!-- the mousewheel plugin - optional to provide mousewheel support -->
+		<script type="text/javascript" src="/static/jScrollPane/script/jquery.mousewheel.js"></script>
+
+	<!--flot-->
+		<script language="javascript" type="text/javascript" src="/static/javascript/flot/jquery.flot.js"></script>
+		<!--[if IE]><script language="javascript" type="text/javascript" src="/static/javascript/flot/excanvas.js"></script><![endif]-->
+		<script language="javascript" type="text/javascript" src="/static/javascript/flot/jquery.flot.fillbetween.js"></script>
+
+	<LINK href="/static/probableCauseCSS.css" rel="stylesheet" type="text/css">
+</head>
+<body>	
+			
+	<!--<h1> Probable-Cause  </h1> -->
+	<img style="margin-left: 180px; padding-top: 10px; padding-bottom: 5px;" src="/static/images/ProbableCauseTitle.png"> 
+	<img src="/static/images/pixeltriple2a.gif" class="marginindent" height="4" width="750"> 
+	<!--<form style="padding-left: 260px;"> 
+		<input style="font-family:Georgia; font-size: 20px;" class="fillin" type="text" name="username" size="30" maxlength="100" value="Ask a Question:"/> 
+		<input type="image" src="/static/images/buttongear.png" alt="Submit Form"> 
+	</form> -->
+	<form style="padding-left: 260px;" action="/search/" method="get">
+        <input type="text" name="q">
+        <input type="submit" value="Search">
+    </form>
+	<img src="/static/images/pixelsingle.gif" class="marginindent" height="1" width="750"> 
+	<head>
+		<title>Search</title>
+	</head>
+    {% if errors %}
+        <ul>
+            {% for error in errors %}
+            <li>{{ error }}</li>
+            {% endfor %}
+        </ul>
+    {% endif %}
+	
+	<p>You searched for: <strong>{{ query }}</strong></p>
+		{% if predictions %}
+			<p>Found {{ predictions|length }} prediction{{ predictions|pluralize }}.</p>
+			<ul>
+				{% for prediction in predictions %}
+					<li><a href="/{{ prediction.id }}/">{{ prediction.name }}</a></li>
+				{% endfor %}
+			</ul>
+		{% else %}
+			<p>No predictions matched your search criteria.</p>
+		{% endif %}
+		<a href="/create/">Didn't find the prediction you were looking for? Create one!</a>
+</body>
+</html>
